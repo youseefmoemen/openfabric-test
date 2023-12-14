@@ -10,7 +10,7 @@ from openfabric_pysdk.context import Ray, State
 from openfabric_pysdk.loader import ConfigClass
 
 import logging
-from transformers import AutoTokenizer, AutoModelForTextEncoding, RagRetriever, AutoModelForSeq2SeqLM, AutoModelForCausalLM, AutoModelWithLMHead
+from transformers import AutoTokenizer, AutoModelForTextEncoding, RagRetriever, AutoModelWithLMHead
 import torch.nn as nn
 import torch
 
@@ -32,7 +32,7 @@ class ContextModel(nn.Module):
         docs_dict = self.retriever(input_ids.cpu().numpy().reshape(-1), question_hidden_states.detach().cpu().numpy(), n_docs=1,return_tensors="pt")
         context_tokens = docs_dict['context_input_ids']
         context = self.tokenizer.batch_decode(context_tokens, skip_special_tokens=True)
-        context = ' '.join(context)[:256]
+        context = ' '.join(context)[:512]
         return context
 
 class QAModel(nn.Module):
