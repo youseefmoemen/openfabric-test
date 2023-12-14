@@ -46,8 +46,7 @@ class QAModel(nn.Module):
         logging.info('Generating Answer')
         prompt =  context + ' based on the previous information answer the following question: ' + question
         inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
-        with torch.no_grad():
-            outputs = self.model.generate(**inputs.to('cuda'))
+        outputs = self.model.generate(**inputs)
         answer = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)
         return answer
 
@@ -74,11 +73,10 @@ def execute(request: SimpleText, ray: Ray, state: State) -> SimpleText:
     output = []
     logging.info(request.text)
     for text in request.text:
-        with torch.no_grad():
-            context = context_model(text)
-            answer = qa_model(text, context)
-            logging.info(text)
-            logging.info(answer)
+        context = context_model(text)
+        answer = qa_model(text, context)
+        logging.info(text)
+        logging.info(answer)
         output.append(answer)
         torch.cuda.empty_cache()
     return SchemaUtil.create(SimpleText(), dict(text=output))
