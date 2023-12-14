@@ -77,6 +77,8 @@ def execute(request: SimpleText, ray: Ray, state: State) -> SimpleText:
         with torch.no_grad():
             context = context_model(text)
             answer = qa_model(text, context)
+            logging.info(text)
+            logging.info(answer)
         output.append(answer)
         torch.cuda.empty_cache()
     return SchemaUtil.create(SimpleText(), dict(text=output))
