@@ -8,7 +8,6 @@ headers = {
 }
 
 # Define the data to send
-#data = {"text": ["What is the capital of Egypt?", "How many elements in the periodic table?", "What is the normal distribution"]}
 data = {"text": ["What is atomic number", "What is the capital of France", "when was alfred nobel born"]}
 # Send a POST request and handle the response
 response = requests.post(url, headers=headers, json=data)
