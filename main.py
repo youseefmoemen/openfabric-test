@@ -19,7 +19,7 @@ import torch
 class ContextModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.device = 'cuda'
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.tokenizer = AutoTokenizer.from_pretrained("facebook/rag-token-nq")
         self.retriever = RagRetriever.from_pretrained(
             "facebook/rag-token-nq", index_name="exact", use_dummy_dataset=True
@@ -38,7 +38,7 @@ class ContextModel(nn.Module):
 class QAModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.device='cuda'
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.tokenizer = AutoTokenizer.from_pretrained('google/flan-t5-large')
         self.model = AutoModelWithLMHead.from_pretrained("google/flan-t5-large", device_map="auto", torch_dtype=torch.float16)
 
